@@ -1,0 +1,36 @@
+.main-container {
+    display: grid;
+    grid-template-columns: auto 400px;
+    height: calc(100vh - 35px);
+}
+.plot-container {
+    background-color: red;
+    
+}
+.map-container {
+    background-color: blue;
+    display: grid;
+    grid-template-columns: calc((100vw - 400px)/2)  calc((100vw - 400px)/2);
+    margin-bottom: auto;
+}
+
+.maps-container{
+    background-color: green;
+    display: grid;
+    grid-template-rows: min-content auto;
+}
+
+@media only screen and (max-width: 900px) {
+  .map-container {
+    width: auto;
+    background-color: blue;
+    display: grid;
+    grid-template-columns: calc((100vw - 400px));
+    margin-bottom: auto;
+}
+}
+
+.map-container-footer{
+    background-color: yellow;
+  
+}
