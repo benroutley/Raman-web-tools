@@ -20,13 +20,31 @@ export class Band implements Band {
     this.sum = 0;
     this.label = label;
   }
-  calculateSum(spectrum: Spectrum) {
+  calculateSumOld(spectrum: Spectrum) {
     let sum = 0;
     for (let index = this.start; index < this.end; index++) {
       sum += spectrum.spline.at(index);
     }
     this.sum = sum;
   }
+
+  calculateSum(spectrum: Spectrum) {
+    let sum = 0;
+    let start = Math.round(this.start - spectrum.offset)
+    let end = Math.round(spectrum.countsSampled.length - 1 - spectrum.offset)
+    for (let index = start; index < end; index++) {
+      //let spectrumIndex = index - spectrum.offset;
+      //if (spectrumIndex < 0) {spectrumIndex = 0 }
+      //let value = spectrum.countsSampled[spectrumIndex];
+      //if(value != NaN){
+        //sum += value;
+      //} 
+      sum += spectrum.countsSampled[index];
+    }
+    this.sum = sum;
+  }
+
+
   calculateHeight(spectrum: Spectrum) {
     let baseSlope =
         (spectrum.spline.at(this.end) - spectrum.spline.at(this.start)) /

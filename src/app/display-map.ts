@@ -16,6 +16,7 @@ export class DisplayMap implements DisplayMap {
     this.band = name;
   }
   makeMapFromSums(mapData: MapData) {
+    this.data = [];
     let mapIndex = mapData.pixels[1][1].getBandIndex(this.band)
     for (let index = 0; index < mapData.height; index++) {
       let row = [];

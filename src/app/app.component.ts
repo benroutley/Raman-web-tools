@@ -1,10 +1,12 @@
-import {Component, ViewChild, ElementRef} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NgxCsvParser} from 'ngx-csv-parser';
-import {MapData} from './map-data';
-import {DisplayMap} from './display-map'
-import * as Ploty from 'plotly.js-dist';
 import {PerfectScrollbarComponent, PerfectScrollbarConfigInterface, PerfectScrollbarDirective} from 'ngx-perfect-scrollbar';
+import * as Ploty from 'plotly.js-dist';
 
+import {DisplayMap} from './display-map'
+import {MapClickData} from './map-click-data';
+import {MapData} from './map-data';
+import {SpectrumTrace} from './spectrum';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +14,15 @@ import {PerfectScrollbarComponent, PerfectScrollbarConfigInterface, PerfectScrol
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
   title = 'raman-app';
   fileToUpload: File = null;
   displayMaps: DisplayMap[] = [];
   mapData: MapData = null;
+  reDrawMaps: boolean = false;
+  reDrawPlot: boolean = false;
+  spectrumTraces: SpectrumTrace[] = [];
+
+  start: number = 1000;
 
   public config: PerfectScrollbarConfigInterface = {suppressScrollX: true};
 
@@ -37,14 +43,46 @@ export class AppComponent {
           displayMap.setBand('Full');
           displayMap.makeMapFromSums(this.mapData);
           this.displayMaps.push(displayMap);
+          console.log(this.mapData.pixels[0][0].spectrum.countsSampled)
         });
   }
-  addMap(bandName: string){
+  addMap(bandName: string) {
     let displayMap = new DisplayMap();
     displayMap.setBand(bandName);
     displayMap.makeMapFromSums(this.mapData);
     this.displayMaps.push(displayMap);
   }
+  mapClicked(clickData: MapClickData) {
+    this.spectrumTraces = [];
+    let trace: SpectrumTrace = {
+      name: '',
+      spectrum: this.mapData.pixels[clickData.y][clickData.x].spectrum
+    }
+    this.spectrumTraces.push(trace);
+    this.redrawPlots();
+  }
+  updateBandTemp(start: number) {
+    this.mapData.upDateBand('Full', {start: start});
+    console.log('new sum' + this.mapData.pixels[1][1].bands[0].sum);
+    this.updateDisplayMaps('Full');
+  }
+  redrawAllMaps() {
+    this.reDrawMaps = !this.reDrawMaps;
+  }
+  redrawPlots() {
+    this.reDrawPlot = !this.reDrawPlot;
+  }
+  updateDisplayMaps(band: string) {
+    this.displayMaps.forEach(map => {
+      if (map.band === band) {
+        console.log('new sum' + this.mapData.pixels[1][1].bands[0].sum)
+        map.makeMapFromSums(this.mapData);
+      }
+    });
+    this.redrawAllMaps();
+  }
 }
+
+
 
 function loadMapDataMeta(data: string) {}

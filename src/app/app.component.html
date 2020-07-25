@@ -3,17 +3,22 @@
   <input type="file" id="file" (change)="handleFileInput($event.target.files)">
 </div>
 <button mat-raised-button color="primary" (click)="addMap('Full')">Add Map</button>
+<input type="number" [(ngModel)]="this.start" (change)="updateBandTemp(this.start)">
+<span>{{ this.mapData.pixels[1][1].bands[0].start }}</span>
 <div class="main-container">
   <div class='maps-container'>
     <div class=" ps" style="position: relative; width: calc(100vw - 400px); height: calc(100vh - 150px);"
       [perfectScrollbar]="config">
       <div class="map-container">
-        <app-plot-map *ngFor="let map of displayMaps; index as i" [displayMap]="map" [index] = "i" >
+        <app-plot-map *ngFor="let map of displayMaps; index as i" [displayMap]="map" [index]="i"
+         [changed]="reDrawMaps" (clicked)="mapClicked($event)">
         </app-plot-map>
       </div>
-     
+
     </div>
     <div class="map-container-footer"></div>
   </div>
-  <div class="plot-container"></div>
+  <div class="plot-container">
+    <app-spectrum-plot [spectrumTraces]="spectrumTraces" [update]="reDrawPlot"></app-spectrum-plot>
+  </div>
 </div>
