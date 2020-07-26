@@ -31,14 +31,20 @@ export class Band implements Band {
   calculateSum(spectrum: Spectrum) {
     let sum = 0;
     let start = Math.round(this.start - spectrum.offset)
-    let end = Math.round(spectrum.countsSampled.length - 1 - spectrum.offset)
+    let end = Math.round(this.end - spectrum.offset)
+    if (end > spectrum.countsSampled.length - 1) {
+      end = spectrum.countsSampled.length - 1
+    };
+    if (start < 0) {
+      start = 0
+    };
     for (let index = start; index < end; index++) {
-      //let spectrumIndex = index - spectrum.offset;
-      //if (spectrumIndex < 0) {spectrumIndex = 0 }
-      //let value = spectrum.countsSampled[spectrumIndex];
-      //if(value != NaN){
-        //sum += value;
-      //} 
+      // let spectrumIndex = index - spectrum.offset;
+      // if (spectrumIndex < 0) {spectrumIndex = 0 }
+      // let value = spectrum.countsSampled[spectrumIndex];
+      // if(value != NaN){
+      // sum += value;
+      //}
       sum += spectrum.countsSampled[index];
     }
     this.sum = sum;

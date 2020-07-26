@@ -1,11 +1,8 @@
 .main{
+    height: 150px;
     display: grid;
-    grid-template-columns: 87.5px 87.5px 87.5px 87.5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    gap: 10px;
-    height: 50px;
+    grid-template-columns: 87.5px calc(100vw - 400px - 97.5px - 110px) auto auto;
+    padding: 10px;
 }
 
 ::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.4em 0px !important;}
@@ -14,12 +11,4 @@
 ::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
     transform: translateY(-1.1em) scale(.75);
     width: 133.33333%;
-}
-
-.slide-container{
-    height: 45px;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: 60px 120px 50px auto;
-    align-items: stretch;
 }

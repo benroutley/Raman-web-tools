@@ -1,1 +1,39 @@
-<p>band works!</p>
+<div class="mat-app-background main">
+
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Label</mat-label>
+    <input matInput (change)="sendUpDate()" [(ngModel)]="bandInfo.name" name="someUnusualName" autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Start</mat-label>
+    <input matInput type="number" (change)="sendUpDate()" [(ngModel)]="bandInfo.start" name="someUnusualName" autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Center</mat-label>
+    <input matInput type="number" (change)="sendUpDate()" [(ngModel)]="bandInfo.center" name="someUnusualName" autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>End</mat-label>
+    <input matInput type="number" (change)="sendUpDate()" [(ngModel)]="bandInfo.end" name="someUnusualName" autocomplete="off">
+  </mat-form-field>
+
+</div>
+<div class="mat-app-background slide-container">
+  
+
+  <button (click)="delete()" [disabled]="index === 0" mat-mini-fab color="primary">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <mat-form-field appearance="outline">
+      <mat-label>Calculation type</mat-label>
+      <mat-select [value] ="'area'">
+          <mat-option value="area">Area</mat-option>
+      </mat-select>
+  </mat-form-field>
+  <div></div>
+  <mat-slide-toggle (change)="sendUpDate()" [(ngModel)]="bandInfo.useBackground" color="primary">Use Background</mat-slide-toggle>
+</div>
+<mat-divider></mat-divider>

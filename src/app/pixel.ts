@@ -24,14 +24,25 @@ export class Pixel implements Pixel {
     this.bands[0].calculateSum(this.spectrum);
   }
   getBandIndex(name: string): number {
-      let index = 0;
-      let count = 0;
-      this.bands.forEach(band=>{
-        if(band.label === name){
-            index = count;
-        }
-        count ++;
-      });
-      return index;
+    let index = 0;
+    let count = 0;
+    this.bands.forEach(band => {
+      if (band.label === name) {
+        index = count;
+      }
+      count++;
+    });
+    return index;
+  }
+  addBand() {
+    let fullBand = new Band(
+        this.spectrum.waveNumber[0],
+        this.spectrum.waveNumber[this.spectrum.waveNumber.length - 1],
+        this.spectrum.waveNumber[0], 'Full');
+    this.bands.push(fullBand);
+    this.bands[this.bands.length -1].calculateSum(this.spectrum);
+  }
+  deleteBand(index: number){
+    this.bands.splice(index,1);
   }
 }

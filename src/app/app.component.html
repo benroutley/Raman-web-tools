@@ -3,22 +3,49 @@
   <input type="file" id="file" (change)="handleFileInput($event.target.files)">
 </div>
 <button mat-raised-button color="primary" (click)="addMap('Full')">Add Map</button>
-<input type="number" [(ngModel)]="this.start" (change)="updateBandTemp(this.start)">
-<span>{{ this.mapData.pixels[1][1].bands[0].start }}</span>
 <div class="main-container">
-  <div class='maps-container'>
-    <div class=" ps" style="position: relative; width: calc(100vw - 400px); height: calc(100vh - 150px);"
+  <div class='mat-app-background maps-container'>
+    <div class=" ps" style="position: relative; width: calc(100vw - 400px); height: calc(100vh - 70px);"
       [perfectScrollbar]="config">
       <div class="map-container">
-        <app-plot-map *ngFor="let map of displayMaps; index as i" [displayMap]="map" [index]="i"
-         [changed]="reDrawMaps" (clicked)="mapClicked($event)">
+        <app-plot-map *ngFor="let map of displayMaps; index as i" [displayMap]="map" [index]="i" [changed]="reDrawMaps"
+          [mapData]="this.mapData" (selectionChanged)="changeSelectedBand($event)" (clicked)="mapClicked($event)"
+          (deleteMap)="deleteMap($event)">
         </app-plot-map>
       </div>
 
     </div>
-    <div class="map-container-footer"></div>
+    <mat-divider></mat-divider>
+
+
   </div>
-  <div class="plot-container">
+  <mat-divider class="mat-app-background" [vertical]="true"></mat-divider>
+  <div class="mat-app-background plot-container">
     <app-spectrum-plot [spectrumTraces]="spectrumTraces" [update]="reDrawPlot"></app-spectrum-plot>
+    <mat-divider>
+    </mat-divider>
+    <mat-tab-group mat-align-tabs="start">
+      <mat-tab label="Background">
+        <div class=" ps" style="position: relative; width: calc(400px); height: calc(100vh - 130px - 300px);"
+          [perfectScrollbar]="config">
+          <app-background></app-background>
+        </div>
+      </mat-tab>
+      <mat-tab label="Bands">
+        <div class=" ps" style="position: relative; width: calc(400px); height: calc(100vh - 130px - 300px);"
+          [perfectScrollbar]="config">
+          <div *ngIf="mapData != undefined">
+            <app-band *ngFor="let band of this.mapData.pixels[1][1].bands; index as i" [bandInfo]="{name: band.label,
+          start: band.start, end: band.end, center: band.center, index:i, useBackground: false}" [index]="i"
+              (bandUpdate)="upDateBand($event)" (deleteBend)="this.deleteBand($event)"></app-band>
+            <div class="add-band-button">
+              <button (click)="this.addBand();" mat-mini-fab color="primary">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

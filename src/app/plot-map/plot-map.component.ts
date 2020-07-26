@@ -3,6 +3,8 @@ import * as Plotly from 'plotly.js-dist';
 
 import {DisplayMap} from '../display-map';
 import {MapClickData} from '../map-click-data';
+import {MapData} from '../map-data';
+import {ChangeBand} from '../change-band';
 
 @Component({
   selector: 'app-plot-map',
@@ -13,14 +15,21 @@ export class PlotMapComponent implements AfterViewInit, OnChanges {
   @Input() changed: Boolean;
   @Input() displayMap: DisplayMap;
   @Input() index: number;
+  @Input() mapData: MapData;
   @Output() clicked = new EventEmitter<MapClickData>();
+  @Output() selectionChanged = new EventEmitter<ChangeBand>();
+  @Output() deleteMap = new EventEmitter<number>();
+
   @ViewChild('plot') plotRef: ElementRef;
   constructor() {}
   plot: any = null;
   newWidth: number = 0;
   init: boolean = false;
+  bands: string[] = [];
+  selectedBand: string = '';
 
   ngOnChanges(changes: SimpleChanges) {
+    this.makeBandList();
     if (this.newWidth != 0) {
       this.reDraw();
     } else if (this.init) {
@@ -30,11 +39,16 @@ export class PlotMapComponent implements AfterViewInit, OnChanges {
       let layout = {
         height: width,
         width: width,
+        title: this.displayMap.band,
         margin: {l: 40, r: 40, t: 40, b: 40},
       };
       Plotly.newPlot(this.plotRef.nativeElement, plotData, layout, config);
       this.bindClickListener();
     }
+  }
+
+  bandChanged(){
+    this.selectionChanged.emit({band: this.selectedBand, index: this.index});
   }
 
   ngAfterViewInit(): void {
@@ -49,11 +63,16 @@ export class PlotMapComponent implements AfterViewInit, OnChanges {
     Plotly.newPlot(this.plotRef.nativeElement, plotData, layout, config);
     this.init = true;
     this.bindClickListener();
+    this.makeBandList();
   }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.newWidth = event.target.innerWidth;
     this.reDraw();
+  }
+
+  delete(){
+    this.deleteMap.emit(this.index);
   }
 
   reDraw() {
@@ -80,6 +99,7 @@ export class PlotMapComponent implements AfterViewInit, OnChanges {
       Plotly.newPlot(this.plotRef.nativeElement, plotData, layout, config);
       this.bindClickListener();
     }
+    this.makeBandList();
   }
 
   bindClickListener() {
@@ -90,6 +110,13 @@ export class PlotMapComponent implements AfterViewInit, OnChanges {
         y: data.points[0].y
       };
       this.clicked.emit(clickData);
-    })
+    });
+  }
+  makeBandList(){
+    this.selectedBand = this.displayMap.band;
+    this.bands = [];
+    this.mapData.pixels[1][1].bands.forEach(band=>{
+      this.bands.push(band.label);
+    });
   }
 }

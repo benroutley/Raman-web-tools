@@ -3,10 +3,12 @@ import {NgxCsvParser} from 'ngx-csv-parser';
 import {PerfectScrollbarComponent, PerfectScrollbarConfigInterface, PerfectScrollbarDirective} from 'ngx-perfect-scrollbar';
 import * as Ploty from 'plotly.js-dist';
 
+import {BandUpdate} from './band-update';
 import {DisplayMap} from './display-map'
 import {MapClickData} from './map-click-data';
 import {MapData} from './map-data';
 import {SpectrumTrace} from './spectrum';
+import {ChangeBand} from './change-band';
 
 @Component({
   selector: 'app-root',
@@ -57,14 +59,22 @@ export class AppComponent {
     let trace: SpectrumTrace = {
       name: '',
       spectrum: this.mapData.pixels[clickData.y][clickData.x].spectrum
-    }
+    };
     this.spectrumTraces.push(trace);
     this.redrawPlots();
   }
-  updateBandTemp(start: number) {
-    this.mapData.upDateBand('Full', {start: start});
-    console.log('new sum' + this.mapData.pixels[1][1].bands[0].sum);
-    this.updateDisplayMaps('Full');
+
+ 
+  upDateBand(update: BandUpdate) {
+    console.log(update.start);
+    this.mapData.upDateBand(update.index, {
+      start: update.start,
+      center: update.center,
+      end: update.end,
+      name: update.name
+    });
+    console.log('start ' + this.mapData.pixels[1][1].bands[0].start);
+    this.updateDisplayMaps(update.name);
   }
   redrawAllMaps() {
     this.reDrawMaps = !this.reDrawMaps;
@@ -72,12 +82,38 @@ export class AppComponent {
   redrawPlots() {
     this.reDrawPlot = !this.reDrawPlot;
   }
+  deleteBand(index: number){
+    this.mapData.deleteBand(index);
+    this.redrawAllMaps();
+  }
+  deleteMap(index: number){
+    this.displayMaps.splice(index,1);
+    this.redrawAllMaps();
+  }
+
+  changeSelectedBand(selection: ChangeBand){
+    this.displayMaps[selection.index].setBand(selection.band);
+    this.updateDisplayMaps(selection.band);
+  }  
+  addBand(){
+    this.mapData.addBand();
+    this.redrawAllMaps();
+  }
   updateDisplayMaps(band: string) {
     this.displayMaps.forEach(map => {
+      let bandExists = false;
+      this.mapData.pixels[1][1].bands.forEach(band2=>{
+        if (map.band === band2.label){
+          bandExists = true;
+        }
+      });
+      if (!bandExists){
+        map.band = this.mapData.pixels[1][1].bands[0].label;
+      }
       if (map.band === band) {
-        console.log('new sum' + this.mapData.pixels[1][1].bands[0].sum)
         map.makeMapFromSums(this.mapData);
       }
+
     });
     this.redrawAllMaps();
   }

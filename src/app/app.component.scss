@@ -1,21 +1,17 @@
 .main-container {
     display: grid;
-    grid-template-columns: auto 400px;
+    grid-template-columns: auto 2px 400px;
     height: calc(100vh - 35px);
 }
-.plot-container {
-    background-color: red;
-    
-}
+
 .map-container {
     background-color: blue;
     display: grid;
-    grid-template-columns: calc((100vw - 400px)/2)  calc((100vw - 400px)/2);
+    grid-template-columns: calc((100vw - 400px)/2) calc((100vw - 400px)/2);
     margin-bottom: auto;
 }
 
 .maps-container{
-    background-color: green;
     display: grid;
     grid-template-rows: min-content auto;
 }
@@ -33,5 +29,9 @@
 .map-container-footer{
     background-color: yellow;
   
+}
+.add-band-button{
+    padding-left: 185px;
+    padding-top: 10px
 }
 

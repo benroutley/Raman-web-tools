@@ -1,17 +1,15 @@
-<div class="mat-app-background plot" #plot></div>
 <div class="mat-app-background main">
     <mat-form-field appearance="outline">
         <mat-label>Band</mat-label>
-        <mat-select (selectionChange)="bandChanged()" [(value)] ="this.selectedBand">
-            <mat-option *ngFor="let band of this.bands" [value]="band">{{ band }}</mat-option>
+        <mat-select [value] ="'A'">
+            <mat-option value="A">A</mat-option>
         </mat-select>
     </mat-form-field>
     <div></div>
     <button mat-mini-fab color="primary">
         <mat-icon>save</mat-icon>
     </button>
-    <div></div>
-    <button (click)="delete()" mat-mini-fab color="primary">
+    <button mat-mini-fab color="primary">
         <mat-icon>delete</mat-icon>
     </button>
 </div>

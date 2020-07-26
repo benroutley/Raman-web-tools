@@ -39,16 +39,28 @@ export class MapData implements MapData {
       this.waveNumber.push(value);
     });
   }
-  upDateBand(name: string, options: {start?: number, end?: number, center?: number}) {
-    let index = this.pixels[1][1].getBandIndex(name);
-      this.pixels.forEach(row => {
-        row.forEach(pixel => {
-            if (options.start != undefined) {pixel.bands[index].start = options.start;}
-            if (options.end != undefined) {pixel.bands[index].start = options.end;}
-            if (options.center != undefined) {pixel.bands[index].start = options.center;}
-            pixel.bands[index].calculateSum(pixel.spectrum);
-        });
+  addBand() {
+    this.pixels.forEach(row => {row.forEach(pixel => {
+                          pixel.addBand();
+                        })});
+  }
+  deleteBand(index: number) {
+    console.log(index);
+    this.pixels.forEach(row => {row.forEach(pixel => {
+                          pixel.deleteBand(index);
+                        })});
+  }
+  upDateBand(
+      index: number,
+      options: {start: number, end: number, center: number, name: string}) {
+    this.pixels.forEach(row => {
+      row.forEach(pixel => {
+        pixel.bands[index].start = options.start;
+        pixel.bands[index].end = options.end;
+        pixel.bands[index].center = options.center;
+        pixel.bands[index].label = options.name;
+        pixel.bands[index].calculateSum(pixel.spectrum);
       });
-      console.log(this.pixels[1][1].bands[0].start);
+    });
   }
 }
