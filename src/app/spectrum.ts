@@ -7,6 +7,7 @@ export interface Spectrum {
   spline: any;
   offset: number;
   waveNumber: number[];
+  waveNumberSampled: number[];
 }
 
 export interface SpectrumTrace {
@@ -22,9 +23,11 @@ export class Spectrum implements Spectrum {
     this.spline = new Spline(waveNumber, counts);
     this.offset = waveNumber[0];
     this.countsSampled = [];
+    this.waveNumberSampled = [];
     for (let index = this.offset; index < waveNumber[waveNumber.length - 1];
          index++) {
       this.countsSampled.push(this.spline.at(index));
+      this.waveNumberSampled.push(index);
     }
   }
 }

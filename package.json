@@ -25,6 +25,7 @@
     "ngx-csv-parser": "0.0.3",
     "ngx-perfect-scrollbar": "^9.0.0",
     "plotly.js-dist": "^1.54.7",
+    "polyfit": "0.0.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

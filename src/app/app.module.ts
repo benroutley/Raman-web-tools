@@ -21,6 +21,8 @@ import {PlotMapComponent} from './plot-map/plot-map.component';
 import {SpectrumPlotComponent} from './spectrum-plot/spectrum-plot.component';
 import { MapToolsComponent } from './map-tools/map-tools.component';
 import { BackgroundComponent } from './background/background.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -34,7 +36,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BrowserModule, PerfectScrollbarModule, BrowserAnimationsModule,
     MatButtonModule, MatGridListModule, FormsModule, MatFormFieldModule,
     MatInputModule, MatTabsModule, MatDividerModule, MatSlideToggleModule,
-    MatIconModule, MatSelectModule
+    MatIconModule, MatSelectModule, MatProgressBarModule, MatProgressSpinnerModule
   ],
   providers: [{
     provide: PERFECT_SCROLLBAR_CONFIG,
