@@ -34,7 +34,9 @@ export class AppComponent {
   @ViewChild(PerfectScrollbarDirective)
   directiveScroll: PerfectScrollbarDirective;
 
-  constructor(private csv: NgxCsvParser) {}
+  constructor(private csv: NgxCsvParser) {
+    console.log('Threads: ' + navigator.hardwareConcurrency || 4)
+  }
 
   handleFileInput(files: FileList) {
     this.csv.parse(files.item(0), {delimiter: '\t'})
@@ -64,6 +66,9 @@ export class AppComponent {
     };
     this.spectrumTraces.push(trace);
     this.redrawPlots();
+    if (this.mapData.pixels[clickData.y][clickData.x].background.run) {
+      this.addFitToPlot();
+    }
   }
 
   addFitToPlot() {
@@ -85,7 +90,7 @@ export class AppComponent {
         spline: '',
         waveNumberSampled: []
       }
-    }
+    };
     this.spectrumTraces.push(background);
     this.redrawPlots();
   }
@@ -148,8 +153,8 @@ export class AppComponent {
 function loadMapDataMeta(data: string) {}
 if (typeof Worker !== 'undefined') {
   // Create a new
-  const worker = new Worker('./app.worker', { type: 'module' });
-  worker.onmessage = ({ data }) => {
+  const worker = new Worker('./app.worker', {type: 'module'});
+  worker.onmessage = ({data}) => {
     console.log(`page got message: ${data}`);
   };
   worker.postMessage('hello');

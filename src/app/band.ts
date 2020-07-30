@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+//import {Injectable} from '@angular/core';
 import {Spectrum} from './spectrum';
 
 export interface Band {
@@ -10,7 +10,7 @@ export interface Band {
   label: string;
 }
 
-Injectable({providedIn: 'root'})
+//Injectable({providedIn: 'root'})
 export class Band implements Band {
   constructor(start: number, end: number, center: number, label: string) {
     this.center = center;

@@ -16,7 +16,7 @@
   
 </div>
 <div class="bottom-container">
-  <mat-progress-spinner  diameter="37" value="0"></mat-progress-spinner>
+  <mat-progress-spinner  diameter="37" [value]="status"></mat-progress-spinner>
   <div></div>
   <button mat-raised-button (click)="fitWorker()" color="primary">Fit</button>
   <div></div>

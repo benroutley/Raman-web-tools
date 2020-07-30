@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+//import {Injectable} from '@angular/core';
 import * as Spline from 'cubic-spline';
 import {Band} from './band';
 
@@ -12,13 +12,15 @@ export interface Background {
   polyFit: any;
   fit: number[];
   ignoreBands: boolean;
+  run: boolean;
 }
 
-Injectable({providedIn: 'root'})
+//Injectable({providedIn: 'root'})
 export class Background implements Background {
   constructor() {
     this.order = 12;
-    this.ignoreBands = true;
+    this.ignoreBands = false;
+    this.run = false;
   }
   makeFit(spectrum: Spectrum, bands: Band[]) {
     if (!this.ignoreBands) {

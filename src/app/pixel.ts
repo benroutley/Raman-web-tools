@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+//import {Injectable} from '@angular/core';
 
 import {Background} from './background';
 import {Band} from './band';
@@ -11,7 +11,7 @@ export interface Pixel {
 }
 
 
-Injectable({providedIn: 'root'})
+//Injectable({providedIn: 'root'})
 export class Pixel implements Pixel {
   constructor(counts: number[], waveNumber: number[]) {
     this.bands = [];
