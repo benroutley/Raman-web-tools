@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import * as Spline from 'cubic-spline';
-import * as PolyFit from '../polyfit';
-import {Spectrum} from '../spectrum';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+
+import {MapClickData} from '../map-click-data';
+import {MapData} from '../map-data';
+import {Pixel} from '../pixel';
 
 @Component({
   selector: 'app-background',
@@ -10,16 +11,42 @@ import {Spectrum} from '../spectrum';
 })
 export class BackgroundComponent implements OnInit {
   constructor() {}
-
-  @Input() data: Spectrum;
+  @Input() mapData: MapData;
+  @Input() mapClickData: MapClickData;
+  @Output() upDatePlot = new EventEmitter<boolean>();
 
   ngOnInit(): void {}
 
+  fitWorker() {
+    if (this.mapClickData != undefined) {
+      let y = this.mapClickData.y;
+      let x = this.mapClickData.x;
+      let pixel = this.mapData.pixels[y][x];
+      let worker = new Worker('../app.worker', {type: 'module'})
+      worker.onmessage = ({data}) => {
+        console.log('worker done');
+        this.upDatePlot.emit(true);
+      };
+      worker.postMessage(pixel);
+    }
+  }
+
   fit() {
-    let poly = new PolyFit(this.data.waveNumberSampled, this.data.countsSampled);
-    let solver = poly.getPolynomial(3);
-    console.log(solver(2400));
-    let terms = poly.computeCoefficients(3);
-    console.log(poly.standardError(terms));
+    if (this.mapClickData != undefined) {
+      let y = this.mapClickData.y;
+      let x = this.mapClickData.x;
+      let pixel = this.mapData.pixels[y][x];
+      pixel.background.makeFit(pixel.spectrum, pixel.bands);
+      console.log('fit done');
+      this.upDatePlot.emit(true);
+    }
+  }
+  fitAll() {
+    this.mapData.pixels.forEach(row => {
+      console.log('line done')
+      row.forEach(pixel => {
+        pixel.background.makeFit(pixel.spectrum, pixel.bands);
+      });
+    });
   }
 }

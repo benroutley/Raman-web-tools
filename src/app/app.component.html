@@ -28,7 +28,8 @@
       <mat-tab label="Background">
         <div class=" ps" style="position: relative; width: calc(400px); height: calc(100vh - 130px - 300px);"
           [perfectScrollbar]="config">
-          <app-background *ngIf="mapData != undefined" [data]="mapData.pixels[1][1].spectrum"></app-background>
+          <app-background *ngIf="mapData != undefined" (upDatePlot)="addFitToPlot()" [mapData]="this.mapData"
+            [mapClickData]="this.mapClickData"></app-background>
         </div>
       </mat-tab>
       <mat-tab label="Bands">

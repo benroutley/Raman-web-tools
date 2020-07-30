@@ -4,11 +4,11 @@ import {PerfectScrollbarComponent, PerfectScrollbarConfigInterface, PerfectScrol
 import * as Ploty from 'plotly.js-dist';
 
 import {BandUpdate} from './band-update';
+import {ChangeBand} from './change-band';
 import {DisplayMap} from './display-map'
 import {MapClickData} from './map-click-data';
 import {MapData} from './map-data';
 import {SpectrumTrace} from './spectrum';
-import {ChangeBand} from './change-band';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +23,7 @@ export class AppComponent {
   reDrawMaps: boolean = false;
   reDrawPlot: boolean = false;
   spectrumTraces: SpectrumTrace[] = [];
+  mapClickData: MapClickData;
 
   start: number = 1000;
 
@@ -55,6 +56,7 @@ export class AppComponent {
     this.displayMaps.push(displayMap);
   }
   mapClicked(clickData: MapClickData) {
+    this.mapClickData = clickData;
     this.spectrumTraces = [];
     let trace: SpectrumTrace = {
       name: '',
@@ -64,7 +66,30 @@ export class AppComponent {
     this.redrawPlots();
   }
 
- 
+  addFitToPlot() {
+    this.spectrumTraces = [];
+    let trace: SpectrumTrace = {
+      name: 'Spectrum',
+      spectrum:
+          this.mapData.pixels[this.mapClickData.y][this.mapClickData.x].spectrum
+    };
+    this.spectrumTraces.push(trace);
+    let pixel = this.mapData.pixels[this.mapClickData.y][this.mapClickData.x];
+    let background: SpectrumTrace = {
+      name: 'Background',
+      spectrum: {
+        counts: pixel.background.fit,
+        waveNumber: pixel.spectrum.waveNumberSampled,
+        countsSampled: [],
+        offset: 0,
+        spline: '',
+        waveNumberSampled: []
+      }
+    }
+    this.spectrumTraces.push(background);
+    this.redrawPlots();
+  }
+
   upDateBand(update: BandUpdate) {
     console.log(update.start);
     this.mapData.upDateBand(update.index, {
@@ -82,38 +107,37 @@ export class AppComponent {
   redrawPlots() {
     this.reDrawPlot = !this.reDrawPlot;
   }
-  deleteBand(index: number){
+  deleteBand(index: number) {
     this.mapData.deleteBand(index);
     this.redrawAllMaps();
   }
-  deleteMap(index: number){
-    this.displayMaps.splice(index,1);
+  deleteMap(index: number) {
+    this.displayMaps.splice(index, 1);
     this.redrawAllMaps();
   }
 
-  changeSelectedBand(selection: ChangeBand){
+  changeSelectedBand(selection: ChangeBand) {
     this.displayMaps[selection.index].setBand(selection.band);
     this.updateDisplayMaps(selection.band);
-  }  
-  addBand(){
+  }
+  addBand() {
     this.mapData.addBand();
     this.redrawAllMaps();
   }
   updateDisplayMaps(band: string) {
     this.displayMaps.forEach(map => {
       let bandExists = false;
-      this.mapData.pixels[1][1].bands.forEach(band2=>{
-        if (map.band === band2.label){
+      this.mapData.pixels[1][1].bands.forEach(band2 => {
+        if (map.band === band2.label) {
           bandExists = true;
         }
       });
-      if (!bandExists){
+      if (!bandExists) {
         map.band = this.mapData.pixels[1][1].bands[0].label;
       }
       if (map.band === band) {
         map.makeMapFromSums(this.mapData);
       }
-
     });
     this.redrawAllMaps();
   }
@@ -122,3 +146,14 @@ export class AppComponent {
 
 
 function loadMapDataMeta(data: string) {}
+if (typeof Worker !== 'undefined') {
+  // Create a new
+  const worker = new Worker('./app.worker', { type: 'module' });
+  worker.onmessage = ({ data }) => {
+    console.log(`page got message: ${data}`);
+  };
+  worker.postMessage('hello');
+} else {
+  // Web Workers are not supported in this environment.
+  // You should add a fallback so that your program still executes correctly.
+}
