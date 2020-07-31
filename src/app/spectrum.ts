@@ -8,6 +8,7 @@ export interface Spectrum {
   offset: number;
   waveNumber: number[];
   waveNumberSampled: number[];
+  backgroundRemoved: number[];
 }
 
 export interface SpectrumTrace {

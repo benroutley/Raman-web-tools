@@ -50,6 +50,25 @@ export class MapData implements MapData {
                           pixel.deleteBand(index);
                         })});
   }
+
+  syncBackgrounds() {
+    this.pixels[1][1].background.order =
+        Math.round(this.pixels[1][1].background.order);
+    if (this.pixels[1][1].background.order < 1) {
+      this.pixels[1][1].background.order = 1
+    };
+    if (this.pixels[1][1].background.order > 20) {
+      this.pixels[1][1].background.order = 20
+    };
+    this.pixels.forEach(row => {
+      row.forEach(pixel => {
+        pixel.background.order = this.pixels[1][1].background.order;
+        pixel.background.type = this.pixels[1][1].background.type;
+        pixel.background.ignoreBands = this.pixels[1][1].background.ignoreBands;
+      });
+    });
+  }
+
   upDateBand(
       index: number,
       options: {start: number, end: number, center: number, name: string}) {

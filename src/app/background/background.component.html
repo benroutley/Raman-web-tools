@@ -1,26 +1,26 @@
 <div class="top-container">
-  <mat-slide-toggle color="primary">Ignore Bands</mat-slide-toggle>
+  <mat-slide-toggle color="primary" (change)="this.mapData.syncBackgrounds()" [(ngModel)]="this.mapData.pixels[1][1].background.ignoreBands">Ignore Bands</mat-slide-toggle>
   <div></div>
-  <mat-form-field appearance="outline">
+  <mat-form-field  appearance="outline">
     <mat-label>Type</mat-label>
-    <mat-select [value]="'poly'">
+    <mat-select (selectionChange)="this.mapData.syncBackgrounds()" [(ngModel)]="this.mapData.pixels[1][1].background.type">
       <mat-option value="poly">Poly</mat-option>
     </mat-select>
   </mat-form-field>
   <div></div>
   <mat-form-field appearance="outline" floatLabel="always">
     <mat-label>Order</mat-label>
-    <input matInput type="number" placeholder="2" name="someUnusualName" autocomplete="off">
+    <input matInput type="number" (change)="this.mapData.syncBackgrounds()" min="1" max="20" [(ngModel)]="this.mapData.pixels[1][1].background.order"name="someUnusualName" autocomplete="off">
   </mat-form-field>
  
   
 </div>
 <div class="bottom-container">
-  <mat-progress-spinner  diameter="37" [value]="status"></mat-progress-spinner>
+  <p>{{ this.status }}</p>
   <div></div>
-  <button mat-raised-button (click)="fitWorker()" color="primary">Fit</button>
+  <button mat-raised-button [disabled]="this.running || this.mapClickData==undefined" (click)="fitWorker()" color="primary">Fit</button>
   <div></div>
-  <button mat-raised-button  (click)="fitAll()" color="primary">Fit All</button>
+  <button mat-raised-button  (click)="fitAll()" color="primary">{{ this.buttonText }}</button>
 </div>
 
 <mat-divider style="position: relative ;top: -15px;"></mat-divider>

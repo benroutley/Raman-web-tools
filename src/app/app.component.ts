@@ -88,10 +88,24 @@ export class AppComponent {
         countsSampled: [],
         offset: 0,
         spline: '',
-        waveNumberSampled: []
+        waveNumberSampled: [],
+        backgroundRemoved: []
       }
     };
     this.spectrumTraces.push(background);
+    let backgroundRemoved: SpectrumTrace = {
+      name: 'Background Removed',
+      spectrum: {
+        counts: pixel.spectrum.backgroundRemoved,
+        waveNumber: pixel.spectrum.waveNumberSampled,
+        countsSampled: [],
+        offset: 0,
+        spline: '',
+        waveNumberSampled: [],
+        backgroundRemoved: []
+      }
+    };
+    this.spectrumTraces.push(backgroundRemoved);
     this.redrawPlots();
   }
 

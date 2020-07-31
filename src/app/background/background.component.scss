@@ -18,7 +18,7 @@
   grid-template-columns: auto 80px 80px 10px 80px;
 }
 
-::ng-deep .mat-slide-toggle-label {
+.status {
   padding-top: 9px;
 }
 
@@ -29,5 +29,10 @@
   display: grid;
   grid-template-columns: 30px auto 80px 10px 80px;
 
+}
+
+.no-animate {
+  -webkit-transition: none !important;
+  transition: none !important;
 }
 
